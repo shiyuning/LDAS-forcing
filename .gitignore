@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Cookies
+.urs_cookies
+
+# Downloaded netCDF files
+data/
+
+# Generated meteorological files
+weather/

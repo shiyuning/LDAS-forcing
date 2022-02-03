@@ -1,0 +1,10 @@
+# Add each desired location to a new line.
+# If a name is not provided, the generate forcing file will be named as:
+#   [LDAS]_[LAT]Nx[LON]W.*
+# Otherwise, it is named as:
+#   [LDAS]_[SITE].*
+# NOTE: Do not use white spaces in your site name.
+# The next line is a required header line and should not be removed
+LATITUDE    LONGITUDE   SITE
+40.667      -77.903
+40.72       -76.6       WE38
