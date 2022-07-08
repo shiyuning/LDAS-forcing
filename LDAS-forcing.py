@@ -420,11 +420,15 @@ def main(params):
     if end_date > datetime.now() or end_date < start_date:
         sys.exit(f"Invalid end date.")
 
-    print(f"Create {ldas} forcing data from {datetime.strftime(start_date, '%Y-%m-%d')} to "
+    print(f"{'Download' if params['download_only'] == True else 'Create'} {ldas} forcing data from "
+        f"{datetime.strftime(start_date, '%Y-%m-%d')} to "
         f"{datetime.strftime(end_date + timedelta(days=-1), '%Y-%m-%d')}:")
 
     # Download LDAS data
     ldas_download(ldas, start_date, end_date)
+
+    if params["download_only"] == True:
+        sys.exit()
 
     # Read LDAS grid and elevation data
     coord, coord_masked, elev_array = read_ldas_grids(ldas)
@@ -475,6 +479,11 @@ def _main():
         default="2000-01-01",
         type=lambda s: datetime.strptime(s, '%Y-%m-%d'),
         help="End year and month YYYY-MM-DD",
+    )
+    parser.add_argument(
+        "--download-only",
+        action="store_true",
+        help="Download LDAS data only (without parsing)",
     )
     args = parser.parse_args()
 
