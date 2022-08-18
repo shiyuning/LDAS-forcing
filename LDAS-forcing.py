@@ -251,12 +251,12 @@ def init_weather_files(ldas, model, sites, grids, coord, elev_array):
         weather_fps[-1].write("# %s grid %.3f%sx%.3f%s\n" %
             (ldas, abs(grid_lat), "S" if grid_lat < 0.0 else "N", abs(grid_lon), "W" if grid_lon < 0.0 else "E"))
         if model == "Cycles":
-            weather_fps[-1].write("%-20s%.2f\n" % ("LATITUDE", grid_lat))
-            weather_fps[-1].write("%-20s%.2f\n" % ("ALTITUDE", elevation))
-            weather_fps[-1].write("%-20s%.1f\n" % ("SCREENING_HEIGHT", 2.0))
-            weather_fps[-1].write("%-8s%-8s%-8s%-8s%-8s%-8s%-8s%-8s%-s\n" %
+            weather_fps[-1].write("%-23s\t%.2f\n" % ("LATITUDE", grid_lat))
+            weather_fps[-1].write("%-23s\t%.2f\n" % ("ALTITUDE", elevation))
+            weather_fps[-1].write("%-23s\t%.1f\n" % ("SCREENING_HEIGHT", 2.0))
+            weather_fps[-1].write("%-7s\t%-7s\t%-7s\t%-7s\t%-7s\t%-7s\t%-7s\t%-7s\t%s\n" %
                 ("YEAR", "DOY", "PP", "TX", "TN", "SOLAR", "RHX", "RHN", "WIND"))
-            weather_fps[-1].write("%-8s%-8s%-8s%-8s%-8s%-8s%-8s%-8s%-s\n" %
+            weather_fps[-1].write("%-7s\t%-7s\t%-7s\t%-7s\t%-7s\t%-7s\t%-7s\t%-7s\t%s\n" %
                 ("####", "###", "mm", "degC", "degC", "MJ/m2", "%", "%", "m/s"))
         elif model == "PIHM":
             weather_fps[-1].write("%-20s%-12s%-8s%-8s%-8s%-8s%-8s%-12s\n" %
@@ -295,7 +295,7 @@ def process_day(t0, ldas, model, grids, fps):
                 _var = read_var(ldas, grids, nc)
                 if model == "PIHM":     # Write to PIHM meteorological files
                     for kgrid in range(len(grids)):
-                        fps[kgrid].write("%-20s%-12.8f%-8.2f%-8.2f%-8.2f%-8.2f%-8.2f%-12.2f\n" % (
+                        fps[kgrid].write("%-20s%-12.8f%-8.2f%-8.2f%-8.2f%-8.2f%-8.2f%.2f\n" % (
                             t.strftime("%Y-%m-%d %H:%M"),
                             _var["PRCP"][kgrid],
                             _var["TMP"][kgrid],
@@ -323,9 +323,9 @@ def process_day(t0, ldas, model, grids, fps):
         rhn = np.array(var["RH"]).min(axis=0)
 
         for kgrid in range(len(grids)):
-            fps[kgrid].write("%-16s%-8.4f%-8.2f%-8.2f%-8.3f%-8.2f%-8.2f%-8.2f\n" % (
-                t0.strftime("%Y    %j"),
-                prcp[kgrid] * 86400.0,
+            fps[kgrid].write("%-15s\t%-7s\t%-7.2f\t%-7.2f\t%-7.3f\t%-7.2f\t%-7.2f\t%.2f\n" % (
+                t0.strftime("%Y   \t%j"),
+                ("%.5f" % (prcp[kgrid] * 86400.0))[0:6],
                 tx[kgrid] - 273.15,
                 tn[kgrid] - 273.15,
                 solar[kgrid] * 86400.0 / 1.0E6,
